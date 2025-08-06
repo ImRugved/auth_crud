@@ -27,8 +27,23 @@ async function initializeDatabase() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `;
-
+    const createOrdersTable = `
+      CREATE TABLE IF NOT EXISTS orders (
+        order_id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT NOT NULL,
+        order_name VARCHAR(255) NOT NULL,
+        city VARCHAR(100) NOT NULL,
+        address VARCHAR(255) NOT NULL,
+        amount DECIMAL(10,2) NOT NULL,
+        date DATE NOT NULL,
+        image VARCHAR(255),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id)
+      )
+    `;
     await pool.query(createUsersTable);
+    await pool.query(createOrdersTable);
     console.log('Database tables initialized successfully');
   } catch (error) {
     console.error('Error initializing database tables:', error);
